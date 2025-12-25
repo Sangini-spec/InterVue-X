@@ -1,7 +1,7 @@
 
 #  InterView X — AI-Powered Interview Preparation Platform
 
-InterView X is a modern, high-performance Single Page Application (SPA) designed to help users practice technical and behavioral interviews using real-time AI, multimodal interactions, and advanced resume tooling.
+InterView X is a modern, high-performance Application designed to help users practice technical and behavioral interviews using real-time AI, multimodal interactions, and advanced resume tooling.
 
 The platform combines **React + TypeScript**, **Google Gemini AI**, **real-time audio/video**, and **canvas-based system design tools** to simulate realistic interview experiences.
 
