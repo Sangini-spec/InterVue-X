@@ -1,0 +1,8 @@
+{
+  "name": "InterView X",
+  "description": "Real-time AI Interview Simulator with Multimodal Capabilities. Features Live Audio interviews, Image-based whiteboard editing, and Veo video scenario generation.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
