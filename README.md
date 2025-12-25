@@ -1,109 +1,292 @@
-# InterVue-X
-InterVue X is an impact-first start-up with a mission to empower job seekers globally through GenAI solutions. We provide real-time interview practices with actionable feedback to track and enhance a candidate’s interview performance.
 
-##1. Tech Stack Overview
-The application is a modern Single Page Application (SPA) built for performance, responsiveness, and real-time capabilities.
-Frontend Framework & Core Libraries
-React (v18+): The core UI library used for building component-based interfaces.
-TypeScript: Used throughout the project for static typing, ensuring code reliability and better developer tooling.
-Vite: The build tool and development server, chosen for its extremely fast HMR (Hot Module Replacement) and optimized production builds.
-React Router DOM (v6+): Handles client-side routing, enabling seamless navigation between pages without refreshing the browser.
-Styling & UI
-Tailwind CSS: A utility-first CSS framework used for styling all components. It provides a responsive, dark-mode-ready design system directly in the HTML.
-Lucide React: An icon library used for consistent, scalable, and customizable SVG icons across the app.
-State Management & Persistence
-React useState & useEffect: Used for local component state management (e.g., form inputs, toggle states, data fetching).
-LocalStorage: Used as a client-side "database" to persist user sessions, interview history, and profile data across browser reloads (intervue_user, intervue_history, intervue_users_db).
-Audio & Multimedia
-Web Audio API: Native browser API used for:
-Capturing microphone input (navigator.mediaDevices.getUserMedia).
-Processing raw PCM audio data (AudioContext, ScriptProcessorNode).
-Visualizing audio frequencies (AnalyserNode).
-Playing back AI-generated audio responses.
-HTML5 <video> & <canvas>: Used for rendering the AI avatar video loops and the whiteboard drawing surface.
+#  InterView X — AI-Powered Interview Preparation Platform
 
-##2. External APIs & AI Integration
-Google Gemini API (@google/genai SDK)
-This is the core intelligence engine of the application.
-Gemini 2.5 Flash Native Audio Preview (gemini-2.5-flash-native-audio-preview-09-2025):
-Used In: InterviewLive.tsx (Live Interview Page).
-Function: Powers the Multimodal Live API. It establishes a WebSocket connection to stream real-time audio from the user and receive low-latency audio responses from the AI interviewer. It handles the conversational logic and persona (e.g., "Dr. Emma").
-Gemini 3 Flash Preview (gemini-3-flash-preview):
-Used In:
-InterviewLive.tsx: For post-interview analysis. It processes the transcript to generate structured JSON feedback (score, strengths, weaknesses).
-ResumeBuilder.tsx: For the AI Polish feature, rewriting resume summaries and bullet points.
-Gemini 2.5 Flash (gemini-2.5-flash):
-Used In:
-InterviewLive.tsx: Acts as the Code Judge. It evaluates user-submitted code against constraints and test cases.
-ResumeReview.tsx: Analyzes uploaded resumes against job descriptions to provide an ATS score and feedback.
-Gemini 2.5 Flash Image (gemini-2.5-flash-image):
-Used In: ImageEditor.tsx.
-Function: Generates or edits images based on text prompts and uploaded base images (e.g., adding a database node to a system design diagram).
-Veo 3.1 Fast Generate Preview (veo-3.1-fast-generate-preview):
-Used In: VideoStudio.tsx.
-Function: Generates short, high-quality video clips from text prompts for creating interview scenarios or office simulations.
-Google Identity Services (Sign-In)
-accounts.google.com/gsi/client: The script loaded in index.html to enable "Sign in with Google" functionality.
-JWT Decoding: Custom utility (utils/auth.ts) to parse the JSON Web Token returned by Google to extract user details (name, email, picture).
+InterView X is a modern, high-performance Single Page Application (SPA) designed to help users practice technical and behavioral interviews using real-time AI, multimodal interactions, and advanced resume tooling.
 
-##3. Page-by-Page Tooling Breakdown
-1. Home / Dashboard (Dashboard.tsx)
-React Router: Navigation to specific tools (/interview, /resume-builder, etc.).
-Tailwind CSS: Complex gradients, responsive grids for the "Benefits" section, and CSS animations for the progress bars.
-LocalStorage: Checks for login state to show the "Welcome Back" toast.
+The platform combines **React + TypeScript**, **Google Gemini AI**, **real-time audio/video**, and **canvas-based system design tools** to simulate realistic interview experiences.
 
-##3. Authentication (Login.tsx, Signup.tsx, utils/auth.ts)
-Google GSI Client: Renders the "Sign in with Google" button.
-LocalStorage:
-intervue_users_db: Stores registered user credentials (mock database).
-intervue_user: Stores the currently active session.
-Crypto API (Browser): (Implicitly used) For basic base64 decoding of JWTs.
+---
 
-##5. Live Interview (InterviewLive.tsx)
-Google GenAI SDK (live.connect): Establishes the real-time WebSocket session.
-Web Audio API:
-AudioContext: Manages the audio graph.
-ScriptProcessorNode: Captures raw PCM data from the microphone.
-AudioBufferSourceNode: Plays back the AI's audio chunks.
-AnalyserNode: Provides frequency data for the <AudioVisualizer>.
-HTML5 Canvas: Renders the real-time audio waveform visualization.
-HTML5 Video: loops the interviewer's "idle" or "talking" video state based on audio activity.
-Monaco Editor (Conceptually): A custom-built code editor UI using textarea and line numbers for the Coding round.
+##  Tech Stack Overview
 
-##6. System Design Interview (SystemDesignInterview.tsx, InterviewWhiteboard.tsx)
-HTML5 Canvas API: The core of the whiteboard.
-getContext('2d'): Used for all drawing operations (lines, shapes, erasing).
-toDataURL(): Used to export the whiteboard as an image.
-React Refs: Used to manipulate the canvas DOM element directly for performance.
-Mouse/Touch Events: Event listeners to track pointer movement for drawing.
+InterView X is built for **performance, scalability, and real-time interaction**, leveraging modern frontend tooling and cloud-native AI APIs.
 
-##7. Resume Builder (ResumeBuilder.tsx)
-React State: Manages the complex JSON object representing the resume data.
-Gemini 3 Flash API: Calls the generateContent method to rewrite text for the "AI Polish" feature.
-CSS Print Media Queries: (@media print) Used to format the layout perfectly when the user presses Ctrl+P or the "Download PDF" button (which triggers browser print).
+---
 
-##8. Resume Review (ResumeReview.tsx)
-File Reader API: Reads uploaded files (Text/Image) from the user's device.
-Gemini 2.5 Flash API:
-Accepts text or base64 image data.
-Returns a structured JSON response with scores and feedback.
+##  Frontend Framework & Core Libraries
 
-##9. Veo Video Studio (VideoStudio.tsx)
-Gemini Veo Model: Calls generateVideos to create MP4 content.
-Google AI Studio Key Selection: Uses window.aistudio to securely request the user's API key for billing-enabled features.
-Fetch API: Retrieves the generated video blob from the URI returned by the model.
+* **React (v18+)**
+  Component-based UI architecture for building interactive, reusable interfaces.
 
-##10. Jobs Board (Jobs.tsx)
-Local Data: A static TypeScript file (data/jobs.ts) acts as the database for job listings.
-Array Methods: filter, map, and slice are used heavily for search, filtering, and pagination logic.
-4. Utilities & Infrastructure
-utils/audio.ts
-Base64 Conversion: Custom functions (base64ToUint8Array, arrayBufferToBase64) to convert between binary audio data and strings for API transmission.
-PCM Processing: float32ToPCM16 converts browser microphone float data to the 16-bit integers required by the Gemini Live API.
-utils/auth.ts
-Session Management: Functions to set, get, and clear cookies/localStorage for user sessions.
-Mock Database: Logic to read/write arrays of user objects to LocalStorage, simulating a backend database.
-components/Layout.tsx
+* **TypeScript**
+  Used throughout the project for static typing, improved maintainability, and safer refactoring.
 
-Dark Mode: Uses a useEffect hook to toggle a .dark class on the <html> element, interacting with Tailwind's dark: modifier.
-This document covers the complete technological footprint of the InterView X application.
+* **Vite**
+  Ultra-fast development server and optimized production bundler with Hot Module Replacement (HMR).
+
+* **React Router DOM (v6+)**
+  Client-side routing for seamless page navigation without full reloads.
+
+---
+
+##  Styling & UI
+
+* **Tailwind CSS**
+  Utility-first CSS framework used across the application, supporting:
+
+  * Responsive layouts
+  * Dark mode
+  * Consistent design tokens
+
+* **Lucide React**
+  SVG-based icon library for scalable, customizable icons.
+
+---
+
+##  State Management & Persistence
+
+* **React Hooks (`useState`, `useEffect`)**
+  Manage component state, lifecycle effects, and data fetching.
+
+* **LocalStorage (Client-Side Persistence)**
+  Used as a lightweight client-side database:
+
+  * `intervue_user` → active session
+  * `intervue_history` → interview records
+  * `intervue_users_db` → mock user database
+
+---
+
+##  Audio & Multimedia
+
+### Web Audio API
+
+Used extensively for real-time voice interviews:
+
+* `navigator.mediaDevices.getUserMedia` — microphone access
+* `AudioContext` — audio graph management
+* `ScriptProcessorNode` — raw PCM audio capture
+* `AnalyserNode` — frequency analysis & visualization
+* AI audio playback using `AudioBufferSourceNode`
+
+### HTML5 Media
+
+* `<video>` — AI avatar loop states (idle / speaking)
+* `<canvas>` — whiteboard drawing & waveform visualizations
+
+---
+
+##  External APIs & AI Integration
+
+### Google Gemini API (`@google/genai`)
+
+#### 🔹 Gemini 2.5 Flash Native Audio Preview
+
+**Model:** `gemini-2.5-flash-native-audio-preview-09-2025`
+**Used in:** `InterviewLive.tsx`
+
+* Powers the **real-time live interview**
+* WebSocket-based streaming of:
+
+  * User microphone audio
+  * Low-latency AI voice responses
+* Handles interviewer persona logic (e.g., *Dr. Emma*)
+
+---
+
+#### 🔹 Gemini 3 Flash Preview
+
+**Model:** `gemini-3-flash-preview`
+
+Used for:
+
+* **Post-Interview Analysis**
+
+  * Generates structured JSON feedback (scores, strengths, weaknesses)
+* **Resume Builder AI Polish**
+
+  * Rewrites summaries and bullet points
+
+---
+
+#### 🔹 Gemini 2.5 Flash
+
+**Model:** `gemini-2.5-flash`
+
+Used for:
+
+* **Code Judge (InterviewLive.tsx)**
+
+  * Evaluates user code against constraints & test cases
+* **Resume Review**
+
+  * ATS scoring and job-fit feedback
+
+---
+
+#### 🔹 Gemini 2.5 Flash Image
+
+**Model:** `gemini-2.5-flash-image`
+
+Used in:
+
+* `ImageEditor.tsx`
+* Image generation & editing for system design diagrams
+
+---
+
+#### 🔹 Veo 3.1 Fast Generate Preview
+
+**Model:** `veo-3.1-fast-generate-preview`
+
+Used in:
+
+* `VideoStudio.tsx`
+* Generates short, high-quality MP4 videos from text prompts
+
+---
+
+##  Google Identity Services (Authentication)
+
+* **Google Sign-In (GSI)**
+
+  * Script: `accounts.google.com/gsi/client`
+  * Enables OAuth-based Google login
+
+* **JWT Decoding**
+
+  * Custom utility (`utils/auth.ts`) extracts:
+
+    * Name
+    * Email
+    * Profile picture
+
+---
+
+##  Page-by-Page Tooling Breakdown
+
+###  Home / Dashboard (`Dashboard.tsx`)
+
+* React Router navigation
+* Tailwind CSS animations & gradients
+* LocalStorage login state detection
+
+---
+
+###  Authentication (`Login.tsx`, `Signup.tsx`)
+
+* Google GSI login button
+* Mock user database using LocalStorage
+* JWT parsing & session persistence
+
+---
+
+###  Live Interview (`InterviewLive.tsx`)
+
+* Gemini Live WebSocket connection
+* Real-time microphone capture
+* AI voice playback
+* Audio waveform visualization
+* Code editor for coding rounds
+* AI-driven interviewer persona
+
+---
+
+###  System Design Interview
+
+Files:
+
+* `SystemDesignInterview.tsx`
+* `InterviewWhiteboard.tsx`
+
+Features:
+
+* HTML5 Canvas drawing
+* Shapes, erasing, freehand diagrams
+* Export whiteboard as image
+* Mouse & touch input support
+
+---
+
+###  Resume Builder (`ResumeBuilder.tsx`)
+
+* JSON-driven resume schema
+* Gemini 3 Flash for AI rewriting
+* Print-optimized PDF export using CSS media queries
+
+---
+
+###  Resume Review (`ResumeReview.tsx`)
+
+* File upload (text / image)
+* Gemini 2.5 Flash analysis
+* ATS score & improvement feedback
+
+---
+
+###  Veo Video Studio (`VideoStudio.tsx`)
+
+* Text-to-video generation
+* Google AI Studio key selection
+* Fetch-based MP4 retrieval
+
+---
+
+###  Jobs Board (`Jobs.tsx`)
+
+* Static TypeScript job database
+* Client-side filtering & pagination
+* Search & category logic using array methods
+
+---
+
+##  Utilities & Infrastructure
+
+### `utils/audio.ts`
+
+* PCM16 audio conversion
+* Base64 ↔ binary transformations
+* Optimized streaming for Gemini Live API
+
+---
+
+### `utils/auth.ts`
+
+* Session creation & cleanup
+* LocalStorage-based mock database
+* JWT decoding utilities
+
+---
+
+### `components/Layout.tsx`
+
+* Dark mode handling
+* Tailwind `dark:` class toggling
+* Global layout wrapper
+
+---
+
+##  Deployment Notes
+
+* Designed for deployment on **Google Cloud** (Cloud Run / Firebase Hosting / App Engine)
+* Google OAuth requires:
+
+  * Stable HTTPS domain
+  * Exact JavaScript Origin
+  * Exact Redirect URI
+
+---
+
+##  Summary
+
+**InterView X** is a full-fledged AI interview simulation platform combining:
+
+* Real-time multimodal AI
+* Advanced frontend engineering
+* Canvas-based system design tools
+* Audio streaming & visualization
+* Resume and ATS intelligence
+
+Built with production-grade technologies and cloud-native AI integration.
+
+
