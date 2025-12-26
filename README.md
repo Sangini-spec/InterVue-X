@@ -5,6 +5,8 @@ InterView X is a modern, high-performance Application designed to help users pra
 
 The platform combines **React + TypeScript**, **Google Gemini AI**, **real-time audio/video**, and **canvas-based system design tools** to simulate realistic interview experiences.
 
+Here's the link to access the application : https://interview-x-918130002834.us-west1.run.app
+
 ---
 
 ##  Tech Stack Overview
