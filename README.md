@@ -1,7 +1,7 @@
 
-#  InterView X — AI-Powered Interview Preparation Platform
+#  InterVue X — AI-Powered Interview Preparation Platform
 
-InterView X is a modern, high-performance Application designed to help users practice technical and behavioral interviews using real-time AI, multimodal interactions, and advanced resume tooling.
+InterVue X is a modern, high-performance Application designed to help users practice technical and behavioral interviews using real-time AI, multimodal interactions, and advanced resume tooling.
 
 The platform combines **React + TypeScript**, **Google Gemini AI**, **real-time audio/video**, and **canvas-based system design tools** to simulate realistic interview experiences.
 
@@ -11,7 +11,7 @@ Here's the link to access the application : https://interview-x-918130002834.us-
 
 ##  Tech Stack Overview
 
-InterView X is built for **performance, scalability, and real-time interaction**, leveraging modern frontend tooling and cloud-native AI APIs.
+InterVue X is built for **performance, scalability, and real-time interaction**, leveraging modern frontend tooling and cloud-native AI APIs.
 
 ---
 
